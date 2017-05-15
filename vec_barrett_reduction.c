@@ -80,9 +80,7 @@ barrett_reduction_reflected (unsigned long data){
 	unsigned long result = 0;
 	/* Get (unsigned long) a into v0 */
 	va = (__vector unsigned long long)__builtin_pack_vector_int128(0UL, data);
-	/* shift into bottom 64 bits, this is a */
-	v4 = (__vector unsigned long long)vec_sld ((__vector unsigned char)vzero,
-			 (__vector unsigned char)va, 8);
+
 	/*
 	 * Now for the actual algorithm. The idea is to calculate q,
 	 * the multiple of our polynomial that we need to subtract. By
