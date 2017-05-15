@@ -33,6 +33,7 @@ PROGS=barrett_reduction_constants \
 PROGS_ALTIVEC=barrett_reduction_test \
 	vec_barrett_reduction_test \
 	final_fold_test \
+	vec_final_fold_test \
 	final_fold2_test \
 	crc32_test crc32_bench crc32_stress
 
@@ -54,6 +55,7 @@ barrett_reduction_test: barrett_reduction_test.o crcmodel.o barrett_reduction.o
 vec_barrett_reduction_test: vec_barrett_reduction_test.o crcmodel.o \
 vec_barrett_reduction.o
 final_fold_test: final_fold_test.o crcmodel.o final_fold.o
+vec_final_fold_test: vec_final_fold_test.o crcmodel.o vec_final_fold.o
 final_fold2_test: final_fold2_test.o crcmodel.o final_fold2.o
 
 crc32_constants.h: crc32_constants
