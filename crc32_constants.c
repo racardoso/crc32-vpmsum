@@ -264,7 +264,6 @@ static void usage(void)
 	fprintf(stderr, "\tCRC without top bit\n");
 	fprintf(stderr, "\t-r bit reflect\n");
 	fprintf(stderr, "\t-x xor input and ouput\n");
-	fprintf(stderr, "\t-v use gcc vector instrisics\n");
 }
 
 int main(int argc, char *argv[])
