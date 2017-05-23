@@ -62,7 +62,7 @@ static void do_nonreflected(unsigned int crc, int xor)
 	printf("\n/* Reduce %d kbits to 1024 bits */", BLOCKING*8);
 	printf("\nstatic const __vector unsigned long long v_crc_const[%d]\n",
 		((BLOCKING*8)/1024)-1);
-	printf("\t__attribute__((aligned (16)) = {\n");
+	printf("\t__attribute__((aligned (16))) = {\n");
 	for (i = (BLOCKING*8)-1024; i > 0; i -= 1024) {
 		a = get_remainder(crc, 32, i+64);
 		b = get_remainder(crc, 32, i);
@@ -82,7 +82,7 @@ static void do_nonreflected(unsigned int crc, int xor)
 		"include the trailing 32 bits of zeros */\n");
 	printf("\nstatic const __vector unsigned long long v_crc_short_const[%d]\n",
 		((1024*2)/128)-1);
-	printf("\t__attribute__((aligned (16)) = {\n");
+	printf("\t__attribute__((aligned (16))) = {\n");
 	for (i = (1024*2)-128; i >= 0; i -= 128) {
 		a = get_remainder(crc, 32, i+128);
 		b = get_remainder(crc, 32, i+96);
