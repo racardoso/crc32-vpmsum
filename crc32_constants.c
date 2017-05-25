@@ -57,7 +57,7 @@ static void do_nonreflected(unsigned int crc, int xor)
 	printf("#else\n");
 	printf("#define MAX_SIZE    %d\n", BLOCKING);
 	/* Generate vector constants. */
-	printf("#ifdef POWER8_INSTRINSICS\n");
+	printf("#ifdef POWER8_INTRINSICS\n");
 	printf("\n/* Constants */\n");
 	printf("\n/* Reduce %d kbits to 1024 bits */", BLOCKING*8);
 	printf("\nstatic const __vector unsigned long long v_crc_const[%d]\n",
@@ -81,7 +81,7 @@ static void do_nonreflected(unsigned int crc, int xor)
 	printf("\n/* Reduce final 1024-2048 bits to 64 bits, shifting 32 bits to "
 		"include the trailing 32 bits of zeros */\n");
 	printf("\nstatic const __vector unsigned long long v_crc_short_const[%d]\n",
-		((1024*2)/128)-1);
+		((1024*2)/128));
 	printf("\t__attribute__((aligned (16))) = {\n");
 	for (i = (1024*2)-128; i >= 0; i -= 128) {
 		a = get_remainder(crc, 32, i+128);
@@ -105,7 +105,7 @@ static void do_nonreflected(unsigned int crc, int xor)
 	printf("/* 33 bit reflected Barrett constant m - (4^32)/n */\n");
 	printf("\nstatic const __vector unsigned long long v_barrett_const[%d]\n"
 		, 2);
-	printf("\t__attribute__((aligned (16)) = {\n");
+	printf("\t__attribute__((aligned (16))) = {\n");
 	/* Print quotient. */
 	printf("\t\t/* x^%u div p(x)  */\n", 64);
 	printf("\t\t{ 0x%016lx, 0x%016lx },\n", get_quotient(crc, 32, 64), 0UL);
@@ -169,7 +169,7 @@ static void do_reflected(unsigned int crc, int xor)
 	printf("\n/* Reduce %d kbits to 1024 bits */", BLOCKING*8);
 	printf("\nstatic const __vector unsigned long long v_crc_const[%d]\n",
 		((BLOCKING*8)/1024)-1);
-	printf("\t__attribute__((aligned (16)) = {\n");
+	printf("\t__attribute__((aligned (16))) = {\n");
 	for (i = (BLOCKING*8)-1024; i > 0; i -= 1024) {
 		a = reflect(get_remainder(crc, 32, i), 32) << 1;
 		b = reflect(get_remainder(crc, 32, i+64), 32) << 1;
@@ -189,8 +189,8 @@ static void do_reflected(unsigned int crc, int xor)
 	printf("\n/* Reduce final 1024-2048 bits to 64 bits, shifting 32 bits to "
 		"include the trailing 32 bits of zeros */\n");
 	printf("\nstatic const __vector unsigned long long v_crc_short_const[%d]\n",
-		((1024*2)/128)-1);
-	printf("\t__attribute__((aligned (16)) = {\n");
+		((1024*2)/128));
+	printf("\t__attribute__((aligned (16))) = {\n");
 	for (i = (1024*2)-128; i >= 0; i -= 128) {
 		a = reflect(get_remainder(crc, 32, i+32), 32);
 		b = reflect(get_remainder(crc, 32, i+64), 32);
@@ -213,7 +213,7 @@ static void do_reflected(unsigned int crc, int xor)
 	printf("/* 33 bit reflected Barrett constant m - (4^32)/n */\n");
 	printf("\nstatic const __vector unsigned long long v_barrett_const[%d]\n"
 		, 2);
-	printf("\t__attribute__((aligned (16)) = {\n");
+	printf("\t__attribute__((aligned (16))) = {\n");
 	/* Print quotient. */
 	printf("\t\t/* x^%u div p(x)  */\n", 64);
 	printf("\t\t{ 0x%016lx, 0x%016lx },\n", get_quotient(crc, 32, 64), 0UL);
