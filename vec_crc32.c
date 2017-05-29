@@ -74,21 +74,21 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len)
 	if (len < 256) {
 		__vector unsigned long long vconst, vdata;
 		unsigned long i;
+		/* Calculate where in the constant table we need to start. */
 		unsigned int offset = 256 - len;
 
-		/*TODO Reorganize this loop to remove those multiply/divide operations*/
-		/* Unrolling??? */
+		/*TODO: Unrolling??? */
 		/*__attribute__((optimize("unroll loops")))*/
-		for (i = 0; i < len/16; i++){
-			/* TODO: Better load the initial value outside the loop */
-			vconst = vec_ld(offset + (i*16), v_crc_short_const);
-			vdata = vec_ld((i*16), (__vector unsigned long long*) p);
+		for (i = 0; i < len; i += 16) {
+			vconst = vec_ld(offset + i, v_crc_short_const);
+			vdata = vec_ld(i, (__vector unsigned long long*) p);
 			#ifdef BYTESWAP_DATA
-			vdata = vec_perm(vdata, vconst, (__vector unsigned char) vperm_const);
+			vdata = vec_perm(vdata, vconst,
+						(__vector unsigned char) vperm_const);
 			#endif
-			/* TODO: very ugly.*/
-			if (i == 0)
-				vdata = vec_xor(vdata,vcrc);
+			if (i == 0) {
+				vdata = vec_xor(vdata, vcrc);
+			}
 			vdata = (__vector unsigned long long) __builtin_crypto_vpmsumw
 				((__vector unsigned int)vdata, (__vector unsigned int)vconst);
 			va = vec_xor(va, vdata);
@@ -99,7 +99,8 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len)
 	__vector unsigned long long vbconst1 = vec_ld(0, v_barrett_const);
 	__vector unsigned long long vbconst2 = vec_ld(16, v_barrett_const);
 
-	v1 = (__vector unsigned long long)vec_sld((__vector unsigned char)va,(__vector unsigned char)va, 8);
+	v1 = (__vector unsigned long long)vec_sld((__vector unsigned char)va,
+			(__vector unsigned char)va, 8);
 	va = vec_xor(v1,va);
 #ifdef REFLECT
 /*TODO: vspltisb v1, 1
