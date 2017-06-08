@@ -508,7 +508,7 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len) {
 	 * V0 [ 0 1 2 X ]
 	 * V0 [ 0 X 2 3 ]
 	 */
-	result = __builtin_unpack_vector_int128 ((vector __int128_t)v0, 1);
+	result = __builtin_unpack_vector_int128 ((__vector __int128_t)v0, 1);
 
 #else
 
@@ -546,7 +546,7 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len) {
 	v0 = (__vector unsigned long long)vec_sld((__vector unsigned char)v0,
         (__vector unsigned char)vzero, 4);
 
-	result = __builtin_unpack_vector_int128 ((vector __int128_t)v0, 0);
+	result = __builtin_unpack_vector_int128 ((__vector __int128_t)v0, 0);
 #endif
 
 	return result;
