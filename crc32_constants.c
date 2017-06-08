@@ -164,7 +164,7 @@ static void do_reflected(unsigned int crc, int xor)
 	printf("#else\n");
 	printf("#define MAX_SIZE    %d\n", BLOCKING);
 	/* Generate vector constants (reflected). */
-	printf("#ifdef POWER8_INSTRINSICS\n");
+	printf("#ifdef POWER8_INTRINSICS\n");
 	printf("\n/* Constants */\n");
 	printf("\n/* Reduce %d kbits to 1024 bits */", BLOCKING*8);
 	printf("\nstatic const __vector unsigned long long v_crc_const[%d]\n",
@@ -216,8 +216,9 @@ static void do_reflected(unsigned int crc, int xor)
 	printf("\t__attribute__((aligned (16))) = {\n");
 	/* Print quotient. */
 	printf("\t\t/* x^%u div p(x)  */\n", 64);
-	printf("\t\t{ 0x%016lx, 0x%016lx },\n", get_quotient(crc, 32, 64), 0UL);
-	printf("\t\t/* 33 bit reflected Barrett constant n */\n");
+	printf("\t\t{ 0x%016lx, 0x%016lx },\n", reflect(get_quotient(crc, 32, 64),
+											33), 0UL);
+	printf("\t\t/* 33 bit reflected Barrett constants n */\n");
 	/* Print Barrett constant. */
 	printf("\t\t{ 0x%016lx, 0x%016lx }\n", reflect((1UL << 32) | crc, 33), 0UL);
 	printf("\t};\n");

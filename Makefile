@@ -1,4 +1,4 @@
-CFLAGS=-m64 -g -O2 -Wall
+CFLAGS=-m64 -g -O0 -Wall
 ASFLAGS=-m64 -g
 LDFLAGS=-m64 -g -static
 
@@ -8,7 +8,7 @@ LDFLAGS=-m64 -g -static
 
 # CRC32C
 CRC=0x11EDC6F41
-OPTIONS=-x
+OPTIONS=-r -x
 
 try-run = $(shell set -e;		\
 	TMP="$(TMPOUT).$$$$.tmp";	\
