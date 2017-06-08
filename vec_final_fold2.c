@@ -115,7 +115,7 @@ final_fold2_reflected(void *__restrict__ data) {
 
 	vdata = vec_ld(0, (__vector unsigned long long*) data);
 #if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
-	__vector unsigned long long vconstp = vec_ld(48, v_fold_reflect2_const);
+	__vector unsigned long long vconstp = vec_ld(48, v_fold2_reflect_const);
 	vdata = vec_perm (vdata, vdata, (__vector unsigned char)vconstp);
 #endif
 

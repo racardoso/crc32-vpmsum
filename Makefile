@@ -1,4 +1,4 @@
-CFLAGS=-m64 -g -O2 -Wall
+CFLAGS=-m64 -g -O2 -mpower8-vector -Wall
 ASFLAGS=-m64 -g
 LDFLAGS=-m64 -g -static
 
