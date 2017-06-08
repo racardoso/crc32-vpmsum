@@ -13,7 +13,13 @@
 
 #include "crc32_constants.h"
 
-/* #define VEC_DUMP(v) printf("0x%016lx%016lx\n", v[1], v[0]);*/
+/*
+#if defined(__LITTLE_ENDIAN__)
+#define VEC_DUMP(v) printf("0x%016lx%016lx\n", v[1], v[0]);
+#else
+#define VEC_DUMP(v) printf("0x%016lx%016lx\n", v[0], v[1]);
+#endif
+*/
 
 #if defined(__BIG_ENDIAN__) && defined (REFLECT)
 #define BYTESWAP_DATA

@@ -69,10 +69,18 @@ static void do_nonreflected(unsigned int crc, int xor)
 		/* Print two remainders. */
 		printf("\t\t/* x^%u mod p(x)` , x^%u mod p(x)` */\n", i+64, i);
 		if (i != 1024) {
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%016lx, 0x%016lx },\n", b, a);
+			#else
+			printf("\t\t{ 0x%016lx, 0x%016lx },\n", a, b);
+			#endif
 		} else {
 			/* Do not print comma on the last element of the array. */
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%016lx, 0x%016lx }\n", b, a);
+			#else
+			printf("\t\t{ 0x%016lx, 0x%016lx }\n", a, b);
+			#endif
 		}
 	}
 	printf("\t};\n");
@@ -93,10 +101,18 @@ static void do_nonreflected(unsigned int crc, int xor)
 		printf("\t\t/* x^%u mod p(x) , x^%u mod p(x) , x^%u mod p(x) , "
 			"x^%u mod p(x)  */\n", i+128, i+96, i+64, i+32);
 		if (i != 0) {
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx },\n", c, d, a, b);
+			#else
+            printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx },\n", a, b, c, d);
+			#endif
 		} else {
 			/* Do not print comma on the last element of the array. */
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx }\n", c, d, a, b);
+			#else
+            printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx }\n", a, b, c, d);
+			#endif
 		}
 	}
 	printf("\t};\n");
@@ -108,10 +124,18 @@ static void do_nonreflected(unsigned int crc, int xor)
 	printf("\t__attribute__((aligned (16))) = {\n");
 	/* Print quotient. */
 	printf("\t\t/* x^%u div p(x)  */\n", 64);
+	#if defined (__LITTLE_ENDIAN__)
 	printf("\t\t{ 0x%016lx, 0x%016lx },\n", get_quotient(crc, 32, 64), 0UL);
+	#else
+    printf("\t\t{ 0x%016lx, 0x%016lx },\n", 0UL, get_quotient(crc, 32, 64));
+	#endif
 	printf("\t\t/* 33 bit reflected Barrett constant n */\n");
 	/* Print Barrett constant. */
+	#if defined (__LITTLE_ENDIAN__)
 	printf("\t\t{ 0x%016lx, 0x%016lx }\n", (1UL << 32) | crc, 0UL);
+	#else
+    printf("\t\t{ 0x%016lx, 0x%016lx }\n", 0UL, (1UL << 32) | crc);
+	#endif
 	printf("\t};\n");
 
 	printf("#else\n"); /* Generate asm constants*/
@@ -177,10 +201,18 @@ static void do_reflected(unsigned int crc, int xor)
 		/* Print two remainders. */
 		printf("\t\t/* x^%u mod p(x)` << 1, x^%u mod p(x)` << 1 */\n", i, i+64);
 		if (i != 1024) {
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%016lx, 0x%016lx },\n", b, a);
+			#else
+			printf("\t\t{ 0x%016lx, 0x%016lx },\n", a, b);
+			#endif
 		} else {
 			/* Do not print comma on the last element of the array. */
+			#if defined (__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%016lx, 0x%016lx }\n", b, a);
+			#else
+            printf("\t\t{ 0x%016lx, 0x%016lx }\n", a, b);
+			#endif
 		}
 	}
 	printf("\t};\n");
@@ -201,10 +233,18 @@ static void do_reflected(unsigned int crc, int xor)
 		printf("\t\t/* x^%u mod p(x) , x^%u mod p(x) , x^%u mod p(x) , "
 			"x^%u mod p(x)  */\n", i+32, i+64, i+96, i+128);
 		if (i != 0) {
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx },\n", c, d, a, b);
+			#else
+            printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx },\n", a, b, c, d);
+			#endif
 		} else {
 			/* Do not print comma on the last element of the array. */
+			#if defined(__LITTLE_ENDIAN__)
 			printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx }\n", c, d, a, b);
+			#else
+            printf("\t\t{ 0x%08lx%08lx, 0x%08lx%08lx }\n", a, b, c, d);
+			#endif
 		}
 	}
 	printf("\t};\n");
@@ -216,11 +256,20 @@ static void do_reflected(unsigned int crc, int xor)
 	printf("\t__attribute__((aligned (16))) = {\n");
 	/* Print quotient. */
 	printf("\t\t/* x^%u div p(x)  */\n", 64);
+	#if defined(__LITTLE_ENDIAN__)
 	printf("\t\t{ 0x%016lx, 0x%016lx },\n", reflect(get_quotient(crc, 32, 64),
-											33), 0UL);
+												33), 0UL);
+	#else
+    printf("\t\t{ 0x%016lx, 0x%016lx },\n", 0UL, reflect(get_quotient(crc, 32,
+													64),33));
+	#endif
 	printf("\t\t/* 33 bit reflected Barrett constants n */\n");
 	/* Print Barrett constant. */
+	#if defined(__LITTLE_ENDIAN__)
 	printf("\t\t{ 0x%016lx, 0x%016lx }\n", reflect((1UL << 32) | crc, 33), 0UL);
+	#else
+    printf("\t\t{ 0x%016lx, 0x%016lx }\n", 0UL, reflect((1UL << 32) | crc, 33));
+	#endif
 	printf("\t};\n");
 
 	printf("#else\n"); /*Generate asm constants (reflected)*/
