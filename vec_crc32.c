@@ -33,11 +33,11 @@
 #if defined(__LITTLE_ENDIAN__)
 /* Byte reverse permute constant LE. */
 static const __vector unsigned long long vperm_const
-    __attribute__ ((aligned(16))) = { 0x08090A0B0C0D0E0FUL,
-            0x0001020304050607UL };
+	__attribute__ ((aligned(16))) = { 0x08090A0B0C0D0E0FUL,
+			0x0001020304050607UL };
 #else
 static const __vector unsigned long long vperm_const
-    __attribute__ ((aligned(16))) = { 0x0F0E0D0C0B0A0908UL,
+	__attribute__ ((aligned(16))) = { 0x0F0E0D0C0B0A0908UL,
 			0X0706050403020100UL };
 #endif
 #else
@@ -429,13 +429,13 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len) {
 		offset = 128 - length;
 
 		v0 = vec_ld(offset, v_crc_short_const);
-        v1 = vec_ld(offset + 16, v_crc_short_const);
-        v2 = vec_ld(offset + 32, v_crc_short_const);
-        v3 = vec_ld(offset + 48, v_crc_short_const);
-        v4 = vec_ld(offset + 64, v_crc_short_const);
-        v5 = vec_ld(offset + 80, v_crc_short_const);
-        v6 = vec_ld(offset + 96, v_crc_short_const);
-        v7 = vec_ld(offset + 112, v_crc_short_const);
+		v1 = vec_ld(offset + 16, v_crc_short_const);
+		v2 = vec_ld(offset + 32, v_crc_short_const);
+		v3 = vec_ld(offset + 48, v_crc_short_const);
+		v4 = vec_ld(offset + 64, v_crc_short_const);
+		v5 = vec_ld(offset + 80, v_crc_short_const);
+		v6 = vec_ld(offset + 96, v_crc_short_const);
+		v7 = vec_ld(offset + 112, v_crc_short_const);
 
 		offset += 128;
 

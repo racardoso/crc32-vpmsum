@@ -2,7 +2,8 @@
  * vec_final_fold.c
  * Author: rcardoso
  * Author: sjmunroe
- * Createdon: May 13, 2017
+ * Created on: May 13, 2017
+ * TODO: License
  *
  */
 
@@ -19,8 +20,8 @@ static const __vector unsigned long long v_fold_const[5]
 		{ 0x0000000104d101dfUL, 0x0000000000000000UL },
 		/* Barrett constant n */
 		{ 0x0000000104c11db7UL, 0x0000000000000000UL },
-        /* byte reverse permute constant, in LE order */
-        { 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
+		/* byte reverse permute constant, in LE order */
+		{ 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
 	};
 
 static const __vector unsigned long long v_fold_reflect_const[5]
@@ -33,37 +34,37 @@ static const __vector unsigned long long v_fold_reflect_const[5]
 		{ 0x00000001f7011641UL, 0x0000000000000000UL },
 		/* 33 bit reflected Barrett constant n */
 		{ 0x00000001db710641UL, 0x0000000000000000UL },
-        /* byte reverse permute constant, in LE order */
-        { 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
+		/* byte reverse permute constant, in LE order */
+		{ 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
 	};
 #else
 static const __vector unsigned long long v_fold_const[5]
-    __attribute__ ((aligned (16))) = {
-        /* x^96 mod p(x) */
-        { 0x0000000000000000UL, 0x00000000f200aa66UL },
-        /* x^64 mod p(x) */
-        { 0x0000000000000000UL, 0x00000000490d678dUL },
-        /* Barrett constant m - (4^32)/n */
-        { 0x0000000000000000UL, 0x0000000104d101dfUL },
-        /* Barrett constant n */
-        { 0x0000000000000000UL, 0x0000000104c11db7UL },
-        /* byte reverse permute constant, in BE order */
-        { 0x0F0E0D0C0B0A0908UL, 0X0706050403020100UL }
-    };
+	__attribute__ ((aligned (16))) = {
+		/* x^96 mod p(x) */
+		{ 0x0000000000000000UL, 0x00000000f200aa66UL },
+		/* x^64 mod p(x) */
+		{ 0x0000000000000000UL, 0x00000000490d678dUL },
+		/* Barrett constant m - (4^32)/n */
+		{ 0x0000000000000000UL, 0x0000000104d101dfUL },
+		/* Barrett constant n */
+		{ 0x0000000000000000UL, 0x0000000104c11db7UL },
+		/* byte reverse permute constant, in BE order */
+		{ 0x0F0E0D0C0B0A0908UL, 0X0706050403020100UL }
+	};
 
 static const __vector unsigned long long v_fold_reflect_const[5]
-    __attribute__ ((aligned (16))) = {
-        /* x^96 mod p(x)` << 1 */
-        { 0x0000000000000000UL, 0x00000000ccaa009eUL },
-        /* x^64 mod p(x)` << 1 */
-        { 0x0000000000000000UL, 0x0000000163cd6124UL },
-        /* 33 bit reflected Barrett constant m - (4^32)/n */
-        { 0x0000000000000000UL, 0x00000001f7011641UL },
-        /* 33 bit reflected Barrett constant n */
-        { 0x0000000000000000UL, 0x00000001db710641UL },
-        /* byte reverse permute constant, in BE order */
-        { 0x0F0E0D0C0B0A0908UL, 0X0706050403020100UL }
-    };
+	__attribute__ ((aligned (16))) = {
+		/* x^96 mod p(x)` << 1 */
+		{ 0x0000000000000000UL, 0x00000000ccaa009eUL },
+		/* x^64 mod p(x)` << 1 */
+		{ 0x0000000000000000UL, 0x0000000163cd6124UL },
+		/* 33 bit reflected Barrett constant m - (4^32)/n */
+		{ 0x0000000000000000UL, 0x00000001f7011641UL },
+		/* 33 bit reflected Barrett constant n */
+		{ 0x0000000000000000UL, 0x00000001db710641UL },
+		/* byte reverse permute constant, in BE order */
+		{ 0x0F0E0D0C0B0A0908UL, 0X0706050403020100UL }
+	};
 #endif
 
 unsigned long __attribute__ ((aligned (32)))
@@ -78,10 +79,10 @@ final_fold(void* __restrict__ data) {
 		(__vector unsigned long long)vec_sld((__vector unsigned char)vzero,
 			(__vector unsigned char)vones, 8);
 
-    __vector unsigned long long vconst1 = vec_ld(0, v_fold_const);
-    __vector unsigned long long vconst2 = vec_ld(16, v_fold_const);
-    __vector unsigned long long vconst3 = vec_ld(32, v_fold_const);
-    __vector unsigned long long vconst4 = vec_ld(48, v_fold_const);
+	__vector unsigned long long vconst1 = vec_ld(0, v_fold_const);
+	__vector unsigned long long vconst2 = vec_ld(16, v_fold_const);
+	__vector unsigned long long vconst3 = vec_ld(32, v_fold_const);
+	__vector unsigned long long vconst4 = vec_ld(48, v_fold_const);
 
 	__vector unsigned long long vdata, v0, v1;
 
@@ -152,10 +153,10 @@ final_fold_reflected(void *__restrict__ data) {
 		(__vector unsigned long long)vec_sld((__vector unsigned char)vzero,
 			(__vector unsigned char)vones, 8);
 
-    __vector unsigned long long vconst1 = vec_ld(0, v_fold_reflect_const);
-    __vector unsigned long long vconst2 = vec_ld(16, v_fold_reflect_const);
-    __vector unsigned long long vconst3 = vec_ld(32, v_fold_reflect_const);
-    __vector unsigned long long vconst4 = vec_ld(48, v_fold_reflect_const);
+	__vector unsigned long long vconst1 = vec_ld(0, v_fold_reflect_const);
+	__vector unsigned long long vconst2 = vec_ld(16, v_fold_reflect_const);
+	__vector unsigned long long vconst3 = vec_ld(32, v_fold_reflect_const);
+	__vector unsigned long long vconst4 = vec_ld(48, v_fold_reflect_const);
 
 	__vector unsigned long long vdata, v0, v1;
 

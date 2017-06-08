@@ -23,7 +23,8 @@ char crc_data[] __attribute__((aligned(4))) = { 0x9e, 0xd3, 0x20, 0xcc, };
  * The CRC appends 32bits of 0s to the end of the message, so replicate
  * that for our Barrett reduction.
  */
-char data[] __attribute__((aligned(8))) = { 0x9e, 0xd3, 0x20, 0xcc, 0, 0, 0, 0, };
+char data[] __attribute__((aligned(8))) = { 0x9e, 0xd3, 0x20, 0xcc, 0, 0,
+											0, 0, };
 
 static void doit(p_cm_t p_cm, char *str)
 {
