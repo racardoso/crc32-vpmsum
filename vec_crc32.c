@@ -30,10 +30,16 @@
 #ifdef BYTESWAP_DATA
 #define VEC_PERM(vr, va, vb, vc) vr = vec_perm(va, vb,\
 										(__vector unsigned char) vc)
+#if defined(__LITTLE_ENDIAN__)
 /* Byte reverse permute constant LE. */
 static const __vector unsigned long long vperm_const
     __attribute__ ((aligned(16))) = { 0x08090A0B0C0D0E0FUL,
             0x0001020304050607UL };
+#else
+static const __vector unsigned long long vperm_const
+    __attribute__ ((aligned(16))) = { 0x0F0E0D0C0B0A0908UL,
+			0X0706050403020100UL };
+#endif
 #else
 #define VEC_PERM(vr, va, vb, vc)
 /* Byte reverse permute constant. */
