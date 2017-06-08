@@ -8,21 +8,39 @@
 #include <stdint.h>
 #include <altivec.h>
 
+#if defined(__LITTLE_ENDIAN__)
 static const __vector unsigned long long v_Barrett_const[2]
-	__attribute__ ((aligned (16))) = {
-		/* Barrett constant m - (4^32)/n */
-		{ 0x0000000104d101dfUL, 0x0000000000000000UL },
-		/* Barrett constant n */
-		{ 0x0000000104c11db7UL, 0x0000000000000000UL }
-	};
+    __attribute__ ((aligned (16))) = {
+        /* Barrett constant m - (4^32)/n */
+        { 0x0000000104d101dfUL, 0x0000000000000000UL },
+        /* Barrett constant n */
+        { 0x0000000104c11db7UL, 0x0000000000000000UL }
+    };
 
 static const __vector unsigned long long v_Barrett_reflect_const[2]
-	__attribute__ ((aligned (16))) = {
-		/* Barrett constant m - (4^32)/n */
-		{ 0x00000001f7011641UL, 0x0000000000000000UL },
-		/* Barrett constant n */
-		{ 0x00000001db710641UL, 0x0000000000000000UL }
-	};
+    __attribute__ ((aligned (16))) = {
+        /* Barrett constant m - (4^32)/n */
+        { 0x00000001f7011641UL, 0x0000000000000000UL },
+        /* Barrett constant n */
+        { 0x00000001db710641UL, 0x0000000000000000UL }
+    };
+#else
+static const __vector unsigned long long v_Barrett_const[2]
+    __attribute__ ((aligned (16))) = {
+        /* Barrett constant m - (4^32)/n */
+        { 0x0000000000000000UL, 0x0000000104d101dfUL },
+        /* Barrett constant n */
+        { 0x0000000000000000UL, 0x0000000104c11db7UL  }
+    };
+
+static const __vector unsigned long long v_Barrett_reflect_const[2]
+    __attribute__ ((aligned (16))) = {
+        /* Barrett constant m - (4^32)/n */
+        { 0x0000000000000000UL, 0x00000001f7011641UL },
+        /* Barrett constant n */
+        { 0x0000000000000000UL, 0x00000001db710641UL }
+    };
+#endif
 
 unsigned long /*__attribute__ ((aligned (32)))*/
 barrett_reduction (unsigned long data){

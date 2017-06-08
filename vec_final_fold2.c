@@ -8,29 +8,55 @@
 
 #include <altivec.h>
 
+#if defined(__LITTLE_ENDIAN__)
 static const __vector unsigned long long v_fold2_const[4]
-	__attribute__ ((aligned (16))) = {
-		/* x^128 mod p(x), x^96 mod p(x), x^64 mod p(x), x^32 mod p(x) */
-		{ 0x490d678d04c11db7UL, 0xe8a45605f200aa66UL },
-		/* Barrett constant m - (4^32)/n */
-		{ 0x0000000104d101dfUL, 0x0000000000000000UL },
-		/* Barrett constant n */
-		{ 0x0000000104c11db7UL, 0x0000000000000000UL },
-		/* byte reverse permute constant, in LE order */
-		{ 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
-	};
+    __attribute__ ((aligned (16))) = {
+        /* x^128 mod p(x), x^96 mod p(x), x^64 mod p(x), x^32 mod p(x) */
+        { 0x490d678d04c11db7UL, 0xe8a45605f200aa66UL },
+        /* Barrett constant m - (4^32)/n */
+        { 0x0000000104d101dfUL, 0x0000000000000000UL },
+        /* Barrett constant n */
+        { 0x0000000104c11db7UL, 0x0000000000000000UL },
+        /* byte reverse permute constant, in LE order */
+        { 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
+    };
 
 static const __vector unsigned long long v_fold2_reflect_const[4]
-	__attribute__ ((aligned (16))) = {
-		/* x^32 mod p(x)`, x^64 mod p(x)`, x^96 mod p(x)`, x^128 mod p(x)` */
-		{ 0x6655004fa06a2517UL, 0xedb88320b1e6b092UL },
-		/* 33 bit reflected Barrett constant m - (4^32)/n */
-		{ 0x00000001f7011641UL, 0x0000000000000000UL },
-		/* 33 bit reflected Barrett constant n */
-		{ 0x00000001db710641UL, 0x0000000000000000UL },
-		/* byte reverse permute constant, in LE order */
-		{ 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
-	};
+    __attribute__ ((aligned (16))) = {
+        /* x^32 mod p(x)`, x^64 mod p(x)`, x^96 mod p(x)`, x^128 mod p(x)` */
+        { 0x6655004fa06a2517UL, 0xedb88320b1e6b092UL },
+        /* 33 bit reflected Barrett constant m - (4^32)/n */
+        { 0x00000001f7011641UL, 0x0000000000000000UL },
+        /* 33 bit reflected Barrett constant n */
+        { 0x00000001db710641UL, 0x0000000000000000UL },
+        /* byte reverse permute constant, in LE order */
+        { 0x08090A0B0C0D0E0FUL, 0x0001020304050607UL }
+    };
+#else
+static const __vector unsigned long long v_fold2_const[4]
+    __attribute__ ((aligned (16))) = {
+        /* x^128 mod p(x), x^96 mod p(x), x^64 mod p(x), x^32 mod p(x) */
+        { 0xe8a45605f200aa66UL, 0x490d678d04c11db7UL },
+        /* Barrett constant m - (4^32)/n */
+        { 0x0000000000000000UL, 0x0000000104d101dfUL },
+        /* Barrett constant n */
+        { 0x0000000000000000UL, 0x0000000104c11db7UL },
+        /* byte reverse permute constant, in BE order */
+        { 0x0F0E0D0C0B0A0908UL, 0X0706050403020100UL }
+    };
+
+static const __vector unsigned long long v_fold2_reflect_const[4]
+    __attribute__ ((aligned (16))) = {
+        /* x^32 mod p(x)`, x^64 mod p(x)`, x^96 mod p(x)`, x^128 mod p(x)` */
+        { 0xedb88320b1e6b092UL, 0x6655004fa06a2517UL },
+        /* 33 bit reflected Barrett constant m - (4^32)/n */
+        { 0x0000000000000000UL, 0x00000001f7011641UL },
+        /* 33 bit reflected Barrett constant n */
+        { 0x0000000000000000UL, 0x00000001db710641UL },
+        /* byte reverse permute constant, in BE order */
+        { 0x0F0E0D0C0B0A0908UL, 0X0706050403020100UL }
+    };
+#endif
 
 unsigned long  __attribute__ ((aligned (32)))
 final_fold2(void *__restrict__ data) {
