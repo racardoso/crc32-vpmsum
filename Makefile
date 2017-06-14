@@ -1,10 +1,10 @@
-CFLAGS=-m64 -g -O2 -mpower8-vector -Wall
+#CC=
+CFLAGS=-m64 -g -O2 -mcpu=power8 -mpower8-vector -Wall
 ASFLAGS=-m64 -g
 LDFLAGS=-m64 -g -static
 
 # Ethernet CRC
 #CRC=0x04C11DB7
-#OPTIONS=
 
 # CRC32
 CRC=0x11EDC6F41
