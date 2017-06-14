@@ -131,6 +131,36 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len) {
 		}
 	} else {
 
+		/* Load initial values. */
+		vdata0 = vec_ld(0, (__vector unsigned long long*) p);
+		vdata1 = vec_ld(16, (__vector unsigned long long*) p);
+
+		VEC_PERM(vdata0, vdata0, vdata0, vperm_const);
+		VEC_PERM(vdata1, vdata1, vdata1, vperm_const);
+
+		vdata2 = vec_ld(32, (__vector unsigned long long*) p);
+		vdata3 = vec_ld(48, (__vector unsigned long long*) p);
+
+		VEC_PERM(vdata2, vdata2, vdata2, vperm_const);
+		VEC_PERM(vdata3, vdata3, vdata3, vperm_const);
+
+		vdata4 = vec_ld(64, (__vector unsigned long long*) p);
+		vdata5 = vec_ld(80, (__vector unsigned long long*) p);
+
+		VEC_PERM(vdata4, vdata4, vdata4, vperm_const);
+		VEC_PERM(vdata5, vdata5, vdata5, vperm_const);
+
+		vdata6 = vec_ld(96, (__vector unsigned long long*) p);
+		vdata7 = vec_ld(112, (__vector unsigned long long*) p);
+
+		VEC_PERM(vdata6, vdata6, vdata6, vperm_const);
+		VEC_PERM(vdata7, vdata7, vdata7, vperm_const);
+
+		/* xor in initial value */
+		vdata0 = vec_xor(vdata0, vcrc);
+
+		p += 128;
+
 		do {
 			/* Checksum in blocks of MAX_SIZE. */
 			block_size = length;
@@ -148,42 +178,6 @@ __crc32_vpmsum(unsigned int crc, void* p, unsigned long len) {
 			offset = (MAX_SIZE/8) - (block_size/8);
 			/* We reduce our final 128 bytes in a separate step */
 			chunks = (block_size/128)-1;
-
-			/*
-			 * If we are looping back to consume more data we use the values
-			 * already in v16-v23.
-			 */
-			if (!next_block) {
-				vdata0 = vec_ld(0, (__vector unsigned long long*) p);
-				VEC_PERM(vdata0, vdata0, vdata0, vperm_const);
-
-				/* xor in initial value */
-				vdata0 = vec_xor(vdata0, vcrc);
-
-				vdata1 = vec_ld(16, (__vector unsigned long long*) p);
-				VEC_PERM(vdata1, vdata1, vdata1, vperm_const);
-
-				vdata2 = vec_ld(32, (__vector unsigned long long*) p);
-				VEC_PERM(vdata2, vdata2, vdata2, vperm_const);
-
-				vdata3 = vec_ld(48, (__vector unsigned long long*) p);
-				VEC_PERM(vdata3, vdata3, vdata3, vperm_const);
-
-				vdata4 = vec_ld(64, (__vector unsigned long long*) p);
-				VEC_PERM(vdata4, vdata4, vdata4, vperm_const);
-
-				vdata5 = vec_ld(80, (__vector unsigned long long*) p);
-				VEC_PERM(vdata5, vdata5, vdata5, vperm_const);
-
-				vdata6 = vec_ld(96, (__vector unsigned long long*) p);
-				VEC_PERM(vdata6, vdata6, vdata6, vperm_const);
-
-				vdata7 = vec_ld(112, (__vector unsigned long long*) p);
-				VEC_PERM(vdata7, vdata7, vdata7, vperm_const);
-
-				vconst1 = vec_ld(offset, v_crc_const);
-				p += 128;
-			}
 
 		    vconst1 = vec_ld(offset, v_crc_const);
 
